@@ -1,4 +1,0 @@
-name resolution {
-  Variable{"X" @:4} |-> Variable{"X" @:1} via [#-scope-1 D Variable{"X" @:1}]
-  Variable{"Y" @:8} |-> Variable{"Y" @:2} via [#-scope-1 D Variable{"Y" @:2}]
-}

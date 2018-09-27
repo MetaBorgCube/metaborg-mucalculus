@@ -10,4 +10,4 @@
 
 /.polyglot.metaborg.yaml
 
-*.muc
+/example/*
