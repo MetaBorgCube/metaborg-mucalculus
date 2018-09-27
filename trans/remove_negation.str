@@ -1,0 +1,38 @@
+module remove_negation
+
+imports
+
+  pp
+  util
+  signatures/mucalculus-sig
+
+strategies
+
+  editor_remove_negation = editor-action-prettyprinted(remove_negation ; pp-debug | "Unnegated")
+
+  remove_negation = topdown(try(unnegate))
+  
+rules
+
+  // In case of fixpoint: instead of substituting X with !X to later get !!X
+  //    we simply do not substitute and say that !X can be rewritten X
+  // This is possible since we go top down, since we disallow free variables and
+  //   since we disallow an uneven number of negations in the scope of a variable
+  // TODO: do this properly
+
+  unnegate: Negation(True()) -> False()
+  unnegate: Negation(False()) -> True()
+  unnegate: Negation(Var(v)) -> Var(v)
+  
+  unnegate: Negation(Negation(f)) -> f
+  
+  unnegate: Negation(And(f, g)) -> Or(Negation(f), Negation(g))
+  unnegate: Negation(Or(f, g)) -> And(Negation(f), Negation(g))
+  
+  unnegate: Negation(Diamond(a, f)) -> Box(a, Negation(f))
+  unnegate: Negation(Box(a, f)) -> Diamond(a, Negation(f))
+  
+  unnegate: Negation(Mu(v, f)) -> Nu(v, Negation(f))
+  unnegate: Negation(Nu(v, f)) -> Mu(v, Negation(f))
+  
+  unnegate: Negation(Nest(f)) -> Nest(Negation(f))

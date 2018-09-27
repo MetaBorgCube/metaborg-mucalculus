@@ -33,6 +33,7 @@ menus
   menu: "Transformation" (openeditor)
   
     action: "Simplify" = editor_simplify
+    action: "Remove negations" = editor_remove_negation
 
 views
   

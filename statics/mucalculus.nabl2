@@ -11,6 +11,10 @@ rules
     Variable{var} -> scope,
     Variable{var} |-> v | error $[Found free variable [var]].
     
+  [[ Negation(f) ^ (scope) ]] :=
+    // TODO: make sure that there are an even number of negations in the scope of a variable
+    [[ f ^ (scope) ]].
+    
   [[ And(f1, f2) ^ (scope) ]] :=
     [[ f1 ^ (scope) ]],
     [[ f2 ^ (scope) ]].
