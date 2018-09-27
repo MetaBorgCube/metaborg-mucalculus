@@ -1,0 +1,34 @@
+module statics/mucalculus
+
+rules
+
+  init ^ (scope) := new scope.
+
+  [[ True() ^ (_) ]].
+  [[ False() ^ (_) ]].
+  
+  [[ Var(var) ^ (scope) ]] :=
+    Variable{var} -> scope,
+    Variable{var} |-> v | error $[Found free variable [var]].
+    
+  [[ And(f1, f2) ^ (scope) ]] :=
+    [[ f1 ^ (scope) ]],
+    [[ f2 ^ (scope) ]].
+  [[ Or(f1, f2) ^ (scope) ]] :=
+    [[ f1 ^ (scope) ]],
+    [[ f2 ^ (scope) ]].
+    
+  [[ Diamond(a, f) ^ (scope) ]] :=
+    [[ f ^ (scope) ]].
+  [[ Box(a, f) ^ (scope) ]] :=
+    [[ f ^ (scope) ]].
+    
+  [[ Mu(var, f) ^ (scope) ]] :=
+    Variable{var} <- scope,
+    [[ f ^ (scope) ]].
+  [[ Nu(var, f) ^ (scope) ]] :=
+    Variable{var} <- scope,
+    [[ f ^ (scope) ]].
+    
+  [[ Nest(f) ^ (scope) ]] :=
+    [[ f ^ (scope) ]].

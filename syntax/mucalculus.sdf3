@@ -1,0 +1,44 @@
+module mucalculus
+
+imports
+  
+  Common
+  
+lexical syntax
+
+  Variable = [A-Z]
+  
+context-free start-symbols
+
+  Start
+
+context-free syntax
+
+  Start = StateFormula
+
+  Action = ID
+  
+  StateFormula.True = [true]
+  StateFormula.False = [false]
+  StateFormula.Var = [[Variable]]
+  
+  StateFormula.And = [[StateFormula] && [StateFormula]] {left}
+  StateFormula.Or = [[StateFormula] || [StateFormula]] {left}
+  
+  StateFormula.Diamond = [<[Action]>[StateFormula]]
+  StateFormula.Box = [\[[Action]\][StateFormula]]
+  
+  StateFormula.Mu = [mu [Variable].[StateFormula]]
+  StateFormula.Nu = [nu [Variable].[StateFormula]]
+  
+  StateFormula.Nest = [([StateFormula])]
+  
+template options
+
+  keyword -/- [a-zA-Z]
+  
+context-free priorities
+
+  {StateFormula.Diamond StateFormula.Box} > {StateFormula.And StateFormula.Or}
+  
+  

@@ -1,0 +1,41 @@
+module Main
+
+imports
+  
+  libspoofax/color/default
+  
+  nabl2/Menus
+  nabl2/References
+  
+language
+
+  extensions : muc
+
+  provider : target/metaborg/stratego.ctree
+  provider : target/metaborg/stratego-javastrat.jar
+
+  table         : target/metaborg/sdf.tbl
+  start symbols : Start
+
+  line comment  : "//"
+  block comment : "/*" * "*/"
+  fences        : [ ] ( ) { }
+  
+  observer : editor-analyze (constraint)
+
+menus
+  
+  menu: "Syntax" (openeditor)
+    
+    action: "Format"          = editor-format (source)
+    action: "Show parsed AST" = debug-show-aterm (source)
+    
+  menu: "Transformation" (openeditor)
+  
+    action: "Simplify" = editor_simplify
+
+views
+  
+  outline view: editor-outline (source)
+    expand to level: 3
+  

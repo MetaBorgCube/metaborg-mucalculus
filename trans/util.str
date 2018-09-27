@@ -1,0 +1,14 @@
+module util
+
+rules
+
+  editor-action(f|extension): (node, _, _, path, _) -> (filename, result)
+    with
+      filename := <guarantee-extension(|extension)> path
+    ; result   := <f> node
+
+  editor-action-prettyprinted(f|op): (node, _, _, path, _) -> (filename, prettyprinted)
+    with
+      ext           := <get-extension> path
+    ; filename      := <guarantee-extension(|$[[op].[ext]])> path
+    ; prettyprinted := <f> node

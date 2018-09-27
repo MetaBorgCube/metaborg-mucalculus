@@ -1,0 +1,10 @@
+scope graph {
+  scope #-scope-1 {
+    declarations {
+      Variable{"X" @:1}
+    }
+    references {
+      Variable{"X" @:3}
+    }
+  }
+}
