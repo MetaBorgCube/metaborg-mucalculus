@@ -39,6 +39,4 @@ template options
   
 context-free priorities
 
-  {StateFormula.Diamond StateFormula.Box} > {StateFormula.And StateFormula.Or}
-  
-  
+  {StateFormula.Diamond StateFormula.Box} > {left: StateFormula.And StateFormula.Or}
