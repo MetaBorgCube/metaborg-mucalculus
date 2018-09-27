@@ -13,14 +13,12 @@ strategies
   simplify = bottomup(try(boolean_simplify))
   
 rules
-  boolean_simplify: True() -> False()
-/*
-  simp: Or(True(), _) -> True()
-  simp: Or(_, True()) -> True()
-  simp: And(False(), _) -> False()
-  simp: And(_, False()) -> False()
-  simp: Or(False(), f) -> f
-  simp: Or(f, False()) -> f
-  simp: And(True(), f) -> f
-  simp: And(f, True()) -> f
-  */
+
+  boolean_simplify: Or(True(), _) -> True()
+  boolean_simplify: Or(_, True()) -> True()
+  boolean_simplify: And(False(), _) -> False()
+  boolean_simplify: And(_, False()) -> False()
+  boolean_simplify: Or(False(), f) -> f
+  boolean_simplify: Or(f, False()) -> f
+  boolean_simplify: And(True(), f) -> f
+  boolean_simplify: And(f, True()) -> f
