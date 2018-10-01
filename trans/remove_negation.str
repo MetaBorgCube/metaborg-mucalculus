@@ -4,6 +4,7 @@ imports
 
   pp
   util
+  nabl2/api
   signatures/mucalculus-sig
 
 strategies
@@ -14,15 +15,9 @@ strategies
   
 rules
 
-  // In case of fixpoint: instead of substituting X with !X to later get !!X
-  //    we simply do not substitute and say that !X can be rewritten X
-  // This is possible since we go top down, since we disallow free variables and
-  //   since we disallow an uneven number of negations in the scope of a variable
-  // TODO: do this properly
-
+  //remove negations by moving them inwards
   unnegate: Negation(True()) -> False()
   unnegate: Negation(False()) -> True()
-  unnegate: Negation(Var(v)) -> Var(v)
   
   unnegate: Negation(Negation(f)) -> f
   
@@ -32,7 +27,25 @@ rules
   unnegate: Negation(Diamond(a, f)) -> Box(a, Negation(f))
   unnegate: Negation(Box(a, f)) -> Diamond(a, Negation(f))
   
-  unnegate: Negation(Mu(v, f)) -> Nu(v, Negation(f))
-  unnegate: Negation(Nu(v, f)) -> Mu(v, Negation(f))
+  unnegate: Negation(Mu(v, f)) -> Nu(v, Negation(g))
+  with (g) := <alltd(negate_var(|v))> (f)
+  unnegate: Negation(Nu(v, f)) -> Mu(v, Negation(g))
+  with (g) := <alltd(negate_var(|v))> (f)
   
   unnegate: Negation(Nest(f)) -> Nest(Negation(f))
+  
+  negate_var(|v): Var(w) -> Negation(Var(w))
+  where <eq>(<strip-annos> v, <strip-annos> w)
+  
+  //each variable must have an even number of negations in its scope
+  //this is done by working the negation inwards and then check whether negated variables exist
+  nabl2-custom-analysis-unit-hook: (_, ast, _) -> errors*
+    with
+      error_vars := <remove_negation ; collect-all(?Negation(Var(_))) > ast;
+      errors* := <map(\ n@Negation(Var(v)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
+
+  nabl2-custom-analysis-final-hook(|a): (_, _, custom-unit-results) -> (errors*, warnings*, notes*, [])
+    with
+      errors*   := <flatten-list> custom-unit-results;
+      warnings* := [];
+      notes*    := []
