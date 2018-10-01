@@ -42,7 +42,7 @@ rules
   nabl2-custom-analysis-unit-hook: (_, ast, _) -> errors*
     with
       error_vars := <remove_negation ; collect-all(?Negation(Var(_))) > ast;
-      errors* := <map(\ n@Negation(Var(v)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
+      errors* := <map(\ Negation(n@Var(v)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
 
   nabl2-custom-analysis-final-hook(|a): (_, _, custom-unit-results) -> (errors*, warnings*, notes*, [])
     with
