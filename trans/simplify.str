@@ -22,3 +22,9 @@ rules
   boolean_simplify: Or(f, False()) -> f
   boolean_simplify: And(True(), f) -> f
   boolean_simplify: And(f, True()) -> f
+  
+  boolean_simplify: Implication(True(), f) -> f
+  boolean_simplify: Implication(False(), _) -> True()
+  boolean_simplify: Implication(_, True()) -> True()
+  boolean_simplify: Implication(f, False()) -> g
+  with g := <try(boolean_simplify)> Negation(f)

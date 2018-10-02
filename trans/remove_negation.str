@@ -24,6 +24,9 @@ rules
   unnegate: Negation(And(f, g)) -> Or(Negation(f), Negation(g))
   unnegate: Negation(Or(f, g)) -> And(Negation(f), Negation(g))
   
+  remove_implication: Implication(f, g) -> Or(Negation(f), g)
+  unnegate = remove_implication
+  
   unnegate: Negation(Diamond(a, f)) -> Box(a, Negation(f))
   unnegate: Negation(Box(a, f)) -> Diamond(a, Negation(f))
   
@@ -39,6 +42,7 @@ rules
   
   //each variable must have an even number of negations in its scope
   //this is done by working the negation inwards and then check whether negated variables exist
+  //TODO: only check this for variables declared in a fixpoint operator
   nabl2-custom-analysis-unit-hook: (_, ast, _) -> errors*
     with
       error_vars := <remove_negation ; collect-all(?Negation(Var(_))) > ast;

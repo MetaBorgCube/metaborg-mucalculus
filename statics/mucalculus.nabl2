@@ -7,30 +7,34 @@ rules
   [[ True() ^ (_) ]].
   [[ False() ^ (_) ]].
   
-  [[ Var(var) ^ (scope) ]] :=
-    Variable{var} -> scope,
-    Variable{var} |-> v | error $[Found free variable [var]].
+  [[ Var(v) ^ (scope) ]] :=
+    Variable{v} -> scope,
+    Variable{v} |-> w | error $[Found free variable [v]].
     
   [[ Negation(f) ^ (scope) ]] :=
     [[ f ^ (scope) ]].
     
-  [[ And(f1, f2) ^ (scope) ]] :=
-    [[ f1 ^ (scope) ]],
-    [[ f2 ^ (scope) ]].
-  [[ Or(f1, f2) ^ (scope) ]] :=
-    [[ f1 ^ (scope) ]],
-    [[ f2 ^ (scope) ]].
+  [[ And(f, g) ^ (scope) ]] :=
+    [[ f ^ (scope) ]],
+    [[ g ^ (scope) ]].
+  [[ Or(f, g) ^ (scope) ]] :=
+    [[ f ^ (scope) ]],
+    [[ g ^ (scope) ]].
+    
+  [[ Implication(f, g) ^ (scope) ]] :=
+    [[ f ^ (scope) ]],
+    [[ g ^ (scope) ]].
     
   [[ Diamond(a, f) ^ (scope) ]] :=
     [[ f ^ (scope) ]].
   [[ Box(a, f) ^ (scope) ]] :=
     [[ f ^ (scope) ]].
     
-  [[ Mu(var, f) ^ (scope) ]] :=
-    Variable{var} <- scope,
+  [[ Mu(v, f) ^ (scope) ]] :=
+    Variable{v} <- scope,
     [[ f ^ (scope) ]].
-  [[ Nu(var, f) ^ (scope) ]] :=
-    Variable{var} <- scope,
+  [[ Nu(v, f) ^ (scope) ]] :=
+    Variable{v} <- scope,
     [[ f ^ (scope) ]].
     
   [[ Nest(f) ^ (scope) ]] :=

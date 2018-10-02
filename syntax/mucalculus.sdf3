@@ -27,6 +27,8 @@ context-free syntax
   StateFormula.And = [[StateFormula] && [StateFormula]] {left}
   StateFormula.Or = [[StateFormula] || [StateFormula]] {left}
   
+  StateFormula.Implication = [[StateFormula] => [StateFormula]]
+  
   StateFormula.Diamond = [<[Action]>[StateFormula]]
   StateFormula.Box = [\[[Action]\][StateFormula]]
   
@@ -43,3 +45,5 @@ context-free priorities
 
      {StateFormula.Negation StateFormula.Diamond StateFormula.Box}
    > {left: StateFormula.And StateFormula.Or}
+   > {StateFormula.Implication}
+   > {StateFormula.Mu StateFormula.Nu}
