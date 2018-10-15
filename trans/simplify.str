@@ -27,4 +27,9 @@ rules
   boolean_simplify: Implication(False(), _) -> True()
   boolean_simplify: Implication(_, True()) -> True()
   boolean_simplify: Implication(f, False()) -> g
-  with g := <try(boolean_simplify)> Negation(f)
+    with g := <try(boolean_simplify)> Negation(f)
+  
+  boolean_simplify: Mu(_, True()) -> True()
+  boolean_simplify: Mu(_, False()) -> False()
+  boolean_simplify: Nu(_, True()) -> True()
+  boolean_simplify: Nu(_, False()) -> False()
