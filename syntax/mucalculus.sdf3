@@ -18,6 +18,18 @@ context-free syntax
 
   Action = ID
   
+  //Regular formula
+  RegularFormula.Action = [[Action]]
+  
+  RegularFormula.Alt = [[RegularFormula] + [RegularFormula]]
+  RegularFormula.Seq = [[RegularFormula].[RegularFormula]]
+  
+  RegularFormula.TRClosure = [[RegularFormula]*]
+  RegularFormula.TClosure = [[RegularFormula]+]
+  
+  RegularFormula.Nest = [([RegularFormula])]
+  
+  //State formula
   StateFormula.True = [true]
   StateFormula.False = [false]
   StateFormula.Var = [[Variable]]
@@ -29,8 +41,8 @@ context-free syntax
   
   StateFormula.Implication = [[StateFormula] => [StateFormula]]
   
-  StateFormula.Diamond = [<[Action]>[StateFormula]]
-  StateFormula.Box = [\[[Action]\][StateFormula]]
+  StateFormula.Diamond = [<[RegularFormula]>[StateFormula]]
+  StateFormula.Box = [\[[RegularFormula]\][StateFormula]]
   
   StateFormula.Mu = [mu [Variable].[StateFormula]]
   StateFormula.Nu = [nu [Variable].[StateFormula]]
@@ -42,6 +54,10 @@ template options
   keyword -/- [a-zA-Z]
   
 context-free priorities
+
+     {RegularFormula.TRClosure RegularFormula.TClosure}
+   > {RegularFormula.Seq}
+   > {RegularFormula.Alt},
 
      {StateFormula.Negation StateFormula.Diamond StateFormula.Box}
    > {left: StateFormula.And StateFormula.Or}
