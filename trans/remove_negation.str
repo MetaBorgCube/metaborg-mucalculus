@@ -9,34 +9,32 @@ imports
 
 strategies
 
-  editor_remove_negation = editor-action-prettyprinted(remove_negation ; pp-debug | "Unnegated")
+  editor_remove_negation = editor-action-prettyprinted(remove_negation_strategy ; pp-debug | "Unnegated")
 
-  remove_negation = topdown(try(unnegate))
+  remove_negation_strategy = topdown(try(remove_negation))
   
 rules
 
   //remove negations by moving them inwards
-  unnegate: Negation(True()) -> False()
-  unnegate: Negation(False()) -> True()
+  remove_negation: Negation(True()) -> False()
+  remove_negation: Negation(False()) -> True()
   
-  unnegate: Negation(Negation(f)) -> f
+  remove_negation: Negation(Negation(f)) -> f
   
-  unnegate: Negation(And(f, g)) -> Or(Negation(f), Negation(g))
-  unnegate: Negation(Or(f, g)) -> And(Negation(f), Negation(g))
+  remove_negation: Negation(And(f, g)) -> Or(Negation(f), Negation(g))
+  remove_negation: Negation(Or(f, g)) -> And(Negation(f), Negation(g))
   
   remove_implication: Implication(f, g) -> Or(Negation(f), g)
-  unnegate = remove_implication
+  remove_negation = remove_implication
   
-  unnegate: Negation(Diamond(a, f)) -> Box(a, Negation(f))
-  unnegate: Negation(Box(a, f)) -> Diamond(a, Negation(f))
+  remove_negation: Negation(Diamond(a, f)) -> Box(a, Negation(f))
+  remove_negation: Negation(Box(a, f)) -> Diamond(a, Negation(f))
   
-  unnegate: Negation(Mu(v, f)) -> Nu(v, Negation(g))
+  remove_negation: Negation(Mu(v, f)) -> Nu(v, Negation(g))
   with (g) := <alltd(negate_var(|v))> (f)
-  unnegate: Negation(Nu(v, f)) -> Mu(v, Negation(g))
+  remove_negation: Negation(Nu(v, f)) -> Mu(v, Negation(g))
   with (g) := <alltd(negate_var(|v))> (f)
-  
-  unnegate: Negation(Nest(f)) -> Nest(Negation(f))
-  
+    
   negate_var(|v): Var(w) -> Negation(Var(w))
   where <eq>(<strip-annos> v, <strip-annos> w)
   
@@ -45,7 +43,7 @@ rules
   //TODO: only check this for variables declared in a fixpoint operator
   nabl2-custom-analysis-unit-hook: (_, ast, _) -> errors*
     with
-      error_vars := <remove_negation ; collect-all(?Negation(Var(_))) > ast;
+      error_vars := <remove_negation_strategy ; collect-all(?Negation(Var(_))) > ast;
       errors* := <map(\ Negation(n@Var(v)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
 
   nabl2-custom-analysis-final-hook(|a): (_, _, custom-unit-results) -> (errors*, warnings*, notes*, [])

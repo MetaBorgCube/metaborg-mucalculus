@@ -36,6 +36,3 @@ rules
   [[ Nu(v, f) ^ (scope) ]] :=
     Variable{v} <- scope,
     [[ f ^ (scope) ]].
-    
-  [[ Nest(f) ^ (scope) ]] :=
-    [[ f ^ (scope) ]].

@@ -8,9 +8,9 @@ imports
 
 strategies
 
-  editor_simplify = editor-action-prettyprinted(simplify ; pp-debug | "simplified")
+  editor_simplify = editor-action-prettyprinted(simplify_strategy ; pp-debug | "simplified")
 
-  simplify = bottomup(try(boolean_simplify))
+  simplify_strategy = bottomup(try(boolean_simplify))
   
 rules
 

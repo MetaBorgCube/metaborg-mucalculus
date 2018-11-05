@@ -27,7 +27,7 @@ context-free syntax
   RegularFormula.TRClosure = [[RegularFormula]*]
   RegularFormula.TClosure = [[RegularFormula]+]
   
-  RegularFormula.Nest = [([RegularFormula])]
+  RegularFormula = [([RegularFormula])] {bracket}
   
   //State formula
   StateFormula.True = [true]
@@ -47,7 +47,7 @@ context-free syntax
   StateFormula.Mu = [mu [Variable].[StateFormula]]
   StateFormula.Nu = [nu [Variable].[StateFormula]]
   
-  StateFormula.Nest = [([StateFormula])]
+  StateFormula = [([StateFormula])] {bracket}
   
 template options
 
