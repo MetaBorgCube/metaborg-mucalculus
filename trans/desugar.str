@@ -1,0 +1,28 @@
+module desugar
+
+imports
+
+  pp
+  util
+  signatures/mucalculus-sig
+
+strategies
+
+  editor_desugar = editor-action-prettyprinted(desugar_regular_strategy ; pp-debug | "desugar")
+
+  desugar_regular_strategy = topdown(try(repeat(desugar_regular)))
+  
+rules
+
+  desugar_regular: Diamond(Alt(a, b), f) -> Or(Diamond(a, f), Diamond(b, f))
+  desugar_regular: Box(Alt(a, b), f) -> And(Box(a, f), Box(b, f))
+  desugar_regular: Diamond(Seq(a, b), f) -> Diamond(a, Diamond(b, f))
+  desugar_regular: Box(Seq(a, b), f) -> Box(a, Box(b, f))
+  
+  //todo: create fresh variable for below 2 rules instead of A
+  desugar_regular: Diamond(TRClosure(a), f) -> Mu(x, Or(f, Diamond(a, Var(x))))
+  with x := "A"
+  desugar_regular: Box(TRClosure(a), f) -> Nu(x, And(f, Box(a, Var(x))))
+  with x := "A"
+  desugar_regular: Diamond(TClosure(a), f) -> Diamond(Seq(a, TRClosure(a)), f)
+  desugar_regular: Box(TClosure(a), f) -> Box(Seq(a, TRClosure(a)), f)

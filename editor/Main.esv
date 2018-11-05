@@ -33,6 +33,7 @@ menus
   menu: "Transformation" (openeditor)
   
     action: "Simplify" = editor_simplify
+    action: "Desugar" = editor_desugar
 
 views
   
