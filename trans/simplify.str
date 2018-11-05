@@ -9,11 +9,16 @@ imports
 strategies
 
   editor_simplify = editor-action-prettyprinted(simplify_strategy ; pp-debug | "simplified")
+  
+  simplify_strategy = remove_negation_strategy ; boolean_simplify_strategy
 
-  simplify_strategy = bottomup(try(boolean_simplify))
+  boolean_simplify_strategy = bottomup(try(boolean_simplify))
+  
+  remove_negation_strategy = topdown(try(remove_negation))
   
 rules
 
+  //BOOLEAN SIMPLIFICATION
   boolean_simplify: Or(True(), _) -> True()
   boolean_simplify: Or(_, True()) -> True()
   boolean_simplify: And(False(), _) -> False()
@@ -22,6 +27,7 @@ rules
   boolean_simplify: Or(f, False()) -> f
   boolean_simplify: And(True(), f) -> f
   boolean_simplify: And(f, True()) -> f
+  //todo: idempotence
   
   boolean_simplify: Implication(True(), f) -> f
   boolean_simplify: Implication(False(), _) -> True()
@@ -33,3 +39,44 @@ rules
   boolean_simplify: Mu(_, False()) -> False()
   boolean_simplify: Nu(_, True()) -> True()
   boolean_simplify: Nu(_, False()) -> False()
+  
+  
+  //NEGATION REMOVAL
+  remove_negation: Negation(True()) -> False()
+  remove_negation: Negation(False()) -> True()
+  
+  remove_negation: Negation(Negation(f)) -> f
+  
+  remove_negation: Negation(And(f, g)) -> Or(Negation(f), Negation(g))
+  remove_negation: Negation(Or(f, g)) -> And(Negation(f), Negation(g))
+  
+  remove_implication: Implication(f, g) -> Or(Negation(f), g)
+  remove_negation = remove_implication
+  
+  remove_negation: Negation(Diamond(a, f)) -> Box(a, Negation(f))
+  remove_negation: Negation(Box(a, f)) -> Diamond(a, Negation(f))
+  
+  remove_negation: Negation(Mu(v, f)) -> Nu(v, Negation(g))
+  with (g) := <alltd(negate_var(|v))> (f)
+  remove_negation: Negation(Nu(v, f)) -> Mu(v, Negation(g))
+  with (g) := <alltd(negate_var(|v))> (f)
+    
+  negate_var(|v): Var(w) -> Negation(Var(w))
+  where <eq>(<strip-annos> v, <strip-annos> w)
+  
+  
+  //MONOTONICITY CHECK
+  //each variable must have an even number of negations in its scope
+  //this is done by working the negation inwards and then check whether negated variables exist
+  //TODO: only check this for variables declared in a fixpoint operator
+  nabl2-custom-analysis-unit-hook: (_, ast, _) -> errors*
+    with
+      error_vars := <remove_negation_strategy ; collect-all(?Negation(Var(_))) > ast;
+      errors* := <map(\ Negation(n@Var(v)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
+
+  nabl2-custom-analysis-final-hook(|a): (_, _, custom-unit-results) -> (errors*, warnings*, notes*, [])
+    with
+      errors*   := <flatten-list> custom-unit-results;
+      warnings* := [];
+      notes*    := []
+  
