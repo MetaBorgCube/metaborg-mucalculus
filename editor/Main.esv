@@ -9,7 +9,7 @@ imports
   
 language
 
-  extensions : muc
+  extensions : mcf
 
   provider : target/metaborg/stratego.ctree
 
