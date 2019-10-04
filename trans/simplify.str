@@ -5,6 +5,7 @@ imports
   pp
   util
   signatures/mucalculus-sig
+  signatures/mcrl2/Data-sig
 
 strategies
 
@@ -44,6 +45,7 @@ rules
   //NEGATION REMOVAL
   remove_negation: Negation(True()) -> False()
   remove_negation: Negation(False()) -> True()
+  remove_negation: Negation(DataValExpression(e)) -> DataValExpression(Neg_SetCompl(e))
   
   remove_negation: Negation(Negation(f)) -> f
   
@@ -55,6 +57,9 @@ rules
   
   remove_negation: Negation(Diamond(a, f)) -> Box(a, Negation(f))
   remove_negation: Negation(Box(a, f)) -> Diamond(a, Negation(f))
+  
+  remove_negation: Negation(Forall(d, f)) -> Exists(d, Negation(f))
+  remove_negation: Negation(Exists(d, f)) -> Forall(d, Negation(f))
   
   remove_negation: Negation(Mu(v, d, f)) -> Nu(v, d, Negation(g))
   with (g) := <alltd(negate_var(|v))> (f)
