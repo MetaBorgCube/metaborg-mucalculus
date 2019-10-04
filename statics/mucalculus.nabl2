@@ -11,6 +11,8 @@ rules
     Variable{v} -> scope,
     Variable{v} |-> w | error $[Found free variable [v]].
     
+  [[ DataValExpression(e) ^ (scope) ]].
+    
   [[ Negation(f) ^ (scope) ]] :=
     [[ f ^ (scope) ]].
     
@@ -29,6 +31,11 @@ rules
     [[ f ^ (scope) ]].
   [[ Box(a, f) ^ (scope) ]] :=
     [[ f ^ (scope) ]].
+  
+  [[ Forall(d, f) ^ (scope) ]] :=
+    [[f ^ (scope) ]].
+  [[ Exists(d, f) ^ (scope) ]] :=
+    [[f ^ (scope) ]].
     
   [[ Mu(v, d, f) ^ (scope) ]] :=
     Variable{v} <- scope,
