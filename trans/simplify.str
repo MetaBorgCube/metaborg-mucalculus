@@ -29,16 +29,16 @@ rules
   boolean_simplify: And(f, True()) -> f
   //todo: idempotence
   
-  boolean_simplify: Implication(True(), f) -> f
-  boolean_simplify: Implication(False(), _) -> True()
-  boolean_simplify: Implication(_, True()) -> True()
-  boolean_simplify: Implication(f, False()) -> g
+  boolean_simplify: Implies(True(), f) -> f
+  boolean_simplify: Implies(False(), _) -> True()
+  boolean_simplify: Implies(_, True()) -> True()
+  boolean_simplify: Implies(f, False()) -> g
     with g := <try(boolean_simplify)> Negation(f)
   
-  boolean_simplify: Mu(_, True()) -> True()
-  boolean_simplify: Mu(_, False()) -> False()
-  boolean_simplify: Nu(_, True()) -> True()
-  boolean_simplify: Nu(_, False()) -> False()
+  boolean_simplify: Mu(_, _, True()) -> True()
+  boolean_simplify: Mu(_, _, False()) -> False()
+  boolean_simplify: Nu(_, _, True()) -> True()
+  boolean_simplify: Nu(_, _, False()) -> False()
   
   
   //NEGATION REMOVAL
@@ -50,18 +50,18 @@ rules
   remove_negation: Negation(And(f, g)) -> Or(Negation(f), Negation(g))
   remove_negation: Negation(Or(f, g)) -> And(Negation(f), Negation(g))
   
-  remove_implication: Implication(f, g) -> Or(Negation(f), g)
+  remove_implication: Implies(f, g) -> Or(Negation(f), g)
   remove_negation = remove_implication
   
   remove_negation: Negation(Diamond(a, f)) -> Box(a, Negation(f))
   remove_negation: Negation(Box(a, f)) -> Diamond(a, Negation(f))
   
-  remove_negation: Negation(Mu(v, f)) -> Nu(v, Negation(g))
+  remove_negation: Negation(Mu(v, d, f)) -> Nu(v, d, Negation(g))
   with (g) := <alltd(negate_var(|v))> (f)
-  remove_negation: Negation(Nu(v, f)) -> Mu(v, Negation(g))
+  remove_negation: Negation(Nu(v, d, f)) -> Mu(v, d, Negation(g))
   with (g) := <alltd(negate_var(|v))> (f)
     
-  negate_var(|v): Var(w) -> Negation(Var(w))
+  negate_var(|v): Var(w, d) -> Negation(Var(w, d))
   where <eq>(<strip-annos> v, <strip-annos> w)
   
   
@@ -71,8 +71,8 @@ rules
   //TODO: only check this for variables declared in a fixpoint operator
   nabl2-custom-analysis-unit-hook: (_, ast, _) -> errors*
     with
-      error_vars := <remove_negation_strategy ; collect-all(?Negation(Var(_))) > ast;
-      errors* := <map(\ Negation(n@Var(v)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
+      error_vars := <remove_negation_strategy ; collect-all(?Negation(Var(_, _))) > ast;
+      errors* := <map(\ Negation(n@Var(v, _)) -> (n, $[Variable [v] has an uneven number of negations in its scope]) \)> error_vars
 
   nabl2-custom-analysis-final-hook(|a): (_, _, custom-unit-results) -> (errors*, warnings*, notes*, [])
     with

@@ -21,7 +21,7 @@ rules
     [[ f ^ (scope) ]],
     [[ g ^ (scope) ]].
     
-  [[ Implication(f, g) ^ (scope) ]] :=
+  [[ Implies(f, g) ^ (scope) ]] :=
     [[ f ^ (scope) ]],
     [[ g ^ (scope) ]].
     
@@ -30,9 +30,9 @@ rules
   [[ Box(a, f) ^ (scope) ]] :=
     [[ f ^ (scope) ]].
     
-  [[ Mu(v, f) ^ (scope) ]] :=
+  [[ Mu(v, d, f) ^ (scope) ]] :=
     Variable{v} <- scope,
     [[ f ^ (scope) ]].
-  [[ Nu(v, f) ^ (scope) ]] :=
+  [[ Nu(v, d, f) ^ (scope) ]] :=
     Variable{v} <- scope,
     [[ f ^ (scope) ]].

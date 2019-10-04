@@ -20,9 +20,9 @@ rules
   desugar_regular: Box(Seq(a, b), f) -> Box(a, Box(b, f))
   
   //todo: create fresh variable for below 2 rules instead of A
-  desugar_regular: Diamond(TRClosure(a), f) -> Mu(x, Or(f, Diamond(a, Var(x))))
+  desugar_regular: Diamond(TRClosure(a), f) -> Mu(x, None(), Or(f, Diamond(a, Var(x, None()))))
   with x := "A"
-  desugar_regular: Box(TRClosure(a), f) -> Nu(x, And(f, Box(a, Var(x))))
+  desugar_regular: Box(TRClosure(a), f) -> Nu(x, None(), And(f, Box(a, Var(x, None()))))
   with x := "A"
   desugar_regular: Diamond(TClosure(a), f) -> Diamond(Seq(a, TRClosure(a)), f)
   desugar_regular: Box(TClosure(a), f) -> Box(Seq(a, TRClosure(a)), f)
