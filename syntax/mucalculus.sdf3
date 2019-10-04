@@ -2,7 +2,9 @@ module mucalculus
 
 imports
   
-  Common
+  mcrl2/Common
+  mcrl2/Data
+  mcrl2/Sort
   
 lexical syntax
 
@@ -16,13 +18,36 @@ context-free syntax
 
   Start = StateFormula
 
-  Action = ID
+  Action = MCRL2-ID
+  
+  DataValExpression.DataValExpression = [val([MCRL2-DataExpr])]
+  
+  DataExprList.DataExprList = [([{MCRL2-DataExpr ","}+])]
+  DataVarAssignment.DataVarAssignment = [[MCRL2-ID] : [MCRL2-SortExpr] = [MCRL2-DataExpr]]
+  DataVarAssignmentList.DataVarAssignmentList = [([{DataVarAssignment ","}+])]
+  
+  //Action formula
+  ActionFormula.ActTrue = [true]
+  ActionFormula.ActFalse = [false]
+  ActionFormula = DataValExpression
+  
+  ActionFormula.Action = Action
+  
+  ActionFormula.ActForall = [forall [{MCRL2-VarsDecl ", "}+].[ActionFormula]]
+  ActionFormula.ActExists = [exists [{MCRL2-VarsDecl ", "}+].[ActionFormula]]
+  
+  ActionFormula.ActNegation = [![ActionFormula]]
+  ActionFormula.ActAnd = [[ActionFormula] && [ActionFormula]] {right}
+  ActionFormula.ActOr = [[ActionFormula] || [ActionFormula]] {right}
+  ActionFormula.ActImplies = [[ActionFormula] => [ActionFormula]] {right}
+  
+  ActionFormula = [([ActionFormula])] {bracket}
   
   //Regular formula
-  RegularFormula.Action = [[Action]]
+  RegularFormula = ActionFormula
   
-  RegularFormula.Alt = [[RegularFormula] + [RegularFormula]]
-  RegularFormula.Seq = [[RegularFormula].[RegularFormula]]
+  RegularFormula.Alt = [[RegularFormula] + [RegularFormula]] {left}
+  RegularFormula.Seq = [[RegularFormula].[RegularFormula]] {right}
   
   RegularFormula.TRClosure = [[RegularFormula]*]
   RegularFormula.TClosure = [[RegularFormula]+]
@@ -32,20 +57,22 @@ context-free syntax
   //State formula
   StateFormula.True = [true]
   StateFormula.False = [false]
-  StateFormula.Var = [[Variable]]
+  StateFormula.Var = [[Variable][DataExprList?]]
+  StateFormula = DataValExpression
   
   StateFormula.Negation = [![StateFormula]]
-  
-  StateFormula.And = [[StateFormula] && [StateFormula]] {left}
-  StateFormula.Or = [[StateFormula] || [StateFormula]] {left}
-  
-  StateFormula.Implication = [[StateFormula] => [StateFormula]]
+  StateFormula.And = [[StateFormula] && [StateFormula]] {right}
+  StateFormula.Or = [[StateFormula] || [StateFormula]] {right}
+  StateFormula.Implies = [[StateFormula] => [StateFormula]] {right}
   
   StateFormula.Diamond = [<[RegularFormula]>[StateFormula]]
-  StateFormula.Box = [\[[RegularFormula]\][StateFormula]]
+  StateFormula.Box = <[<RegularFormula>]<StateFormula>>
   
-  StateFormula.Mu = [mu [Variable].[StateFormula]]
-  StateFormula.Nu = [nu [Variable].[StateFormula]]
+  StateFormula.Forall = [forall [{MCRL2-VarsDecl ", "}+].[StateFormula]]
+  StateFormula.Exists = [exists [{MCRL2-VarsDecl ", "}+].[StateFormula]]
+  
+  StateFormula.Mu = [mu [Variable][DataVarAssignmentList?].[StateFormula]]
+  StateFormula.Nu = [nu [Variable][DataVarAssignmentList?].[StateFormula]]
   
   StateFormula = [([StateFormula])] {bracket}
   
@@ -55,11 +82,16 @@ template options
   
 context-free priorities
 
+     {ActionFormula.ActNegation}
+   > {left: ActionFormula.ActAnd ActionFormula.ActOr}
+   > {ActionFormula.ActImplies}
+   > {ActionFormula.ActForall ActionFormula.ActExists},
+
      {RegularFormula.TRClosure RegularFormula.TClosure}
    > {RegularFormula.Seq}
    > {RegularFormula.Alt},
 
      {StateFormula.Negation StateFormula.Diamond StateFormula.Box}
    > {left: StateFormula.And StateFormula.Or}
-   > {StateFormula.Implication}
-   > {StateFormula.Mu StateFormula.Nu}
+   > {StateFormula.Implies}
+   > {StateFormula.Forall StateFormula.Exists StateFormula.Mu StateFormula.Nu}
