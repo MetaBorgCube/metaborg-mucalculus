@@ -11,9 +11,9 @@ strategies
 
   editor_simplify = editor-action-prettyprinted(simplify_strategy ; pp-debug | "simplified")
   
-  simplify_strategy = remove_negation_strategy ; boolean_simplify_strategy
+  simplify_strategy = remove_negation_strategy ; state_formula_strategy
 
-  boolean_simplify_strategy = bottomup(try(boolean_simplify))
+  state_formula_strategy = bottomup(try(state_formula_simplify))
   
   remove_negation_strategy = topdown(try(remove_negation))
   
@@ -36,11 +36,33 @@ rules
   boolean_simplify: Implies(f, False()) -> g
     with g := <try(boolean_simplify)> Negation(f)
   
-  boolean_simplify: Mu(_, _, True()) -> True()
-  boolean_simplify: Mu(_, _, False()) -> False()
-  boolean_simplify: Nu(_, _, True()) -> True()
-  boolean_simplify: Nu(_, _, False()) -> False()
+  //STATEFORMULA SIMPLIFICATION
+  state_formula_simplify = boolean_simplify
   
+  state_formula_simplify: Diamond(a, False()) -> False()
+  state_formula_simplify: Box(a, True()) -> True()
+  state_formula_simplify: Diamond(ActFalse(), f) -> False()
+  state_formula_simplify: Box(ActFalse(), f) -> True()
+  
+  state_formula_simplify: Forall(d, f) -> result
+  where
+    d' := <remove_unused_vars> (d, f);
+    result := <if(<?[]> d', !f, !Forall(d', f))>
+  state_formula_simplify: Exists(d, f) -> result
+  where
+    d' := <remove_unused_vars> (d, f);
+    result := <if(<?[]> d', !f, !Exists(d', f))>
+  
+  state_formula_simplify: Mu(v, d, Var(v, d')) -> False()
+  state_formula_simplify: Nu(v, d, Var(v, d')) -> True()
+  state_formula_simplify: Mu(v, d, f) -> result
+  where
+    d' := <remove_unused_vars_from_datavarassignments(|<collect(?DataRef(<id>))> f)> d;
+    result := <if(<collect(?Var(v, _)) ; ?[]> f, !f, !Mu(v, d', f))>
+  state_formula_simplify: Nu(v, d, f) -> result
+  where
+    d' := <remove_unused_vars_from_datavarassignments(|<collect(?DataRef(<id>))> f)> d;
+    result := <if(<collect(?Var(v, _)) ; ?[]> f, !f, !Nu(v, d', f))>
   
   //NEGATION REMOVAL
   remove_negation: Negation(True()) -> False()
