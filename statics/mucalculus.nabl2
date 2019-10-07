@@ -7,7 +7,7 @@ rules
   [[ True() ^ (_) ]].
   [[ False() ^ (_) ]].
   
-  [[ Var(v) ^ (scope) ]] :=
+  [[ Var(v, d) ^ (scope) ]] :=
     Variable{v} -> scope,
     Variable{v} |-> w | error $[Found free variable [v]].
     
