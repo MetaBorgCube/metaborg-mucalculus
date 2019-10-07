@@ -17,12 +17,10 @@ rules
       ext           := <get-extension> path
     ; filename      := <guarantee-extension(|$[[op].[ext]])> path
     ; prettyprinted := <f> node
-    
-  equal-stripped = strip-annos ; equal
   
   remove_unused_vars_from_varsdecl(|used_vars): VarsDecl(vars, type) -> result
   where
-    vars' := <filter(\ v -> <elem(equal-stripped)> (v, used_vars) \)> vars;
+    vars' := <filter(\ v -> v where <elem> (v, used_vars) \)> vars;
     result := <if(<?[]> vars', ![], ![VarsDecl(vars', type)])>
 
   remove_unused_vars: (varsdecls, f) -> <mapconcat(remove_unused_vars_from_varsdecl(|used_vars))> varsdecls
@@ -30,7 +28,7 @@ rules
     used_vars := <collect(?DataRef(<id>))> f
   
   remove_unused_vars_from_datavarassignments(|used_vars): None() -> None()
-  remove_unused_vars_from_datavarassignments(|used_vars): Some(assignments) -> result
+  remove_unused_vars_from_datavarassignments(|used_vars): Some(DataVarAssignmentList(assignments)) -> result
   where
-    assignments' := <filter(\ DataVarAssignment(v, t, i) -> <elem(equal-stripped)> (v, used_vars) \)> assignments;
-    result := <if(<?[]> assignments', !None(), !Some(assignments'))>
+    assignments' := <filter(\ a@DataVarAssignment(v, t, i) -> a where <elem> (v, used_vars) \)> assignments;
+    result := <if(<?[]> assignments', !None(), !Some(DataVarAssignmentList(assignments')))>

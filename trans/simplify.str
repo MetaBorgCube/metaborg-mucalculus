@@ -11,6 +11,8 @@ strategies
 
   editor_simplify = editor-action-prettyprinted(simplify_strategy ; pp-debug | "simplified")
   
+  editor_simplify_ast = editor-action(simplify_strategy | "simplified.aterm")
+  
   simplify_strategy = remove_negation_strategy ; state_formula_strategy
 
   state_formula_strategy = bottomup(try(state_formula_simplify))

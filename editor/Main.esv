@@ -31,8 +31,9 @@ menus
     
   menu: "Transformation" (openeditor)
   
-    action: "Simplify" = editor_simplify
-    action: "Desugar" = editor_desugar
+    action: "Simplify" = editor_simplify (source)
+    action: "Simplify (AST)" = editor_simplify_ast (source)
+    action: "Desugar" = editor_desugar (source)
 
 views
   
