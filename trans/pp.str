@@ -7,6 +7,7 @@ imports
   libspoofax/editor/refactoring/-
   pp/mucalculus-parenthesize
   pp/mucalculus-pp
+  mcrl2/syntax/-
 
 rules
 
@@ -35,7 +36,7 @@ rules
     parenthesize-mucalculus
     ; prettyprint-mucalculus(|sort)
     ; !V([], <id>)
-    ; box2text-string(|120)  
+    ; box2text-string(|120)
       
   pp-debug :
     ast -> result
@@ -43,6 +44,11 @@ rules
        result := <pp-mucalculus-string> ast
     <+ <bottomup(try(not(is-string); not(is-list); not(pp-mucalculus-string); debug(!"cannot pp ")))> ast
     ;  result := ""
+  
+  prettyprint-mucalculus-MCRL2-ID       = prettyprint-mcrl2-MCRL2-ID
+  prettyprint-mucalculus-MCRL2-SortExpr = prettyprint-mcrl2-MCRL2-SortExpr
+  prettyprint-mucalculus-MCRL2-DataExpr = prettyprint-mcrl2-MCRL2-DataExpr
+  prettyprint-mucalculus-MCRL2-VarsDecl = prettyprint-mcrl2-MCRL2-VarsDecl
 
 rules
   
