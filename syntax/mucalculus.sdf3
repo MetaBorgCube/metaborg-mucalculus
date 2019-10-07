@@ -2,6 +2,7 @@ module mucalculus
 
 imports
   
+  Layout
   mcrl2/Common
   mcrl2/Data
   mcrl2/Sort
