@@ -7,7 +7,7 @@ imports
 
   statics/-
 
-  pp
+  mucalculus/pp
 
 rules // Analysis
 

@@ -3,11 +3,11 @@ module mucalculus
 imports
   
   completion/completion
-  pp
-  outline
-  analysis
-  simplify
-  desugar
+  mucalculus/pp
+  mucalculus/outline
+  mucalculus/analysis
+  mucalculus/simplify
+  mucalculus/desugar
 
 rules // Debugging
   

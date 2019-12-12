@@ -2,8 +2,8 @@ module desugar
 
 imports
 
-  pp
-  util
+  mucalculus/pp
+  mucalculus/util
   signatures/mucalculus-sig
 
 strategies

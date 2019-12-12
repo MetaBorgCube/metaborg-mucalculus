@@ -2,8 +2,8 @@ module simplify
 
 imports
 
-  pp
-  util
+  mucalculus/pp
+  mucalculus/util
   signatures/mucalculus-sig
   signatures/mcrl2/Data-sig
 
