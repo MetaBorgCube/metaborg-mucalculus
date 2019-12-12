@@ -1,4 +1,4 @@
-module analysis
+module mucalculus/analysis
 
 imports
   
