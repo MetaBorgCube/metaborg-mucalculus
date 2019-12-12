@@ -1,5 +1,5 @@
 ---
-id: org.example:mucalculus:0.1.0-SNAPSHOT
+id: org.metaborg:mucalculus:0.1.0-SNAPSHOT
 name: mucalculus
 dependencies:
   compile:
