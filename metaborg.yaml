@@ -12,12 +12,26 @@ dependencies:
   - org.metaborg:org.metaborg.meta.nabl2.shared:${metaborgVersion}
   - org.metaborg:org.metaborg.meta.nabl2.runtime:${metaborgVersion}
   - org.metaborg:mcrl2:0.1.0-SNAPSHOT
-pardonedLanguages:
-- EditorService
-- Stratego-Sugar
-- SDF
-debug:
-  typesmart: false
+exports:
+- language: Stratego-Sugar
+  directory: trans
+  includes:
+  - "mucalculus/**/*.str"
+- language: ATerm
+  directory: src-gen/syntax
+  includes:
+  - "**/*.aterm"
+- language: Stratego-Sugar
+  directory: src-gen
+  includes:
+  - "completion/mucalculus/**/*.str"
+  - "pp/mucalculus/**/*.str"
+  - "pp/mucalculus-parenthesize.str"
+  - "signatures/mucalculus/**/*.str"
+- language: EditorService
+  directory: src-gen
+  includes:
+  - "completion/colorer/mucalculus/**/*.esv"
 language:
   sdf:
     pretty-print: mucalculus
