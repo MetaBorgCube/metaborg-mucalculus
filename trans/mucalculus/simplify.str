@@ -2,16 +2,15 @@ module mucalculus/simplify
 
 imports
 
-  mucalculus/pp
   mucalculus/util
   signatures/mucalculus-sig
   signatures/mcrl2/Data-sig
 
 strategies
 
-  editor_simplify = editor-action-prettyprinted(simplify_strategy ; pp-debug | "simplified")
+  editor_simplify = editor-action-pp(simplify_strategy | "simplified")
   
-  editor_simplify_ast = editor-action(simplify_strategy | "simplified.aterm")
+  editor_simplify_ast = editor-action-ast(simplify_strategy | "simplified.aterm")
   
   simplify_strategy = remove_negation_strategy ; state_formula_strategy
 

@@ -2,13 +2,12 @@ module mucalculus/desugar
 
 imports
 
-  mucalculus/pp
   mucalculus/util
   signatures/mucalculus-sig
 
 strategies
 
-  editor_desugar = editor-action-prettyprinted(desugar_regular_strategy ; pp-debug | "desugar")
+  editor_desugar = editor-action-pp(desugar_regular_strategy | "desugar")
 
   desugar_regular_strategy = topdown(try(repeat(desugar_regular)))
   

@@ -16,7 +16,7 @@ rules
     with
       ext      := <get-extension> path
     ; filename := <guarantee-extension(|$[pp.[ext]])> path
-    ; result   := <pp-debug> node
+    ; result   := <pp-mucalculus-string> node
 
 rules
   
@@ -37,13 +37,6 @@ rules
     ; prettyprint-mucalculus(|sort)
     ; !V([], <id>)
     ; box2text-string(|120)
-      
-  pp-debug :
-    ast -> result
-    with
-       result := <pp-mucalculus-string> ast
-    <+ <bottomup(try(not(is-string); not(is-list); not(pp-mucalculus-string); debug(!"cannot pp ")))> ast
-    ;  result := ""
   
   prettyprint-mucalculus-MCRL2-ID       = prettyprint-mcrl2-MCRL2-ID
   prettyprint-mucalculus-MCRL2-SortExpr = prettyprint-mcrl2-MCRL2-SortExpr

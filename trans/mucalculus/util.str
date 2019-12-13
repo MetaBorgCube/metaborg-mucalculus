@@ -2,21 +2,22 @@ module mucalculus/util
 
 imports
 
+  mucalculus/pp
   signatures/mucalculus-sig
   signatures/mcrl2/Data-sig
 
 rules
 
-  editor-action(f|extension): (node, _, _, path, _) -> (filename, result)
+  editor-action-ast(f|extension): (node, _, _, path, _) -> (filename, result)
     with
       filename := <guarantee-extension(|extension)> path
     ; result   := <f> node
 
-  editor-action-prettyprinted(f|op): (node, _, _, path, _) -> (filename, prettyprinted)
+  editor-action-pp(f|op): (node, _, _, path, _) -> (filename, prettyprinted)
     with
       ext           := <get-extension> path
     ; filename      := <guarantee-extension(|$[[op].[ext]])> path
-    ; prettyprinted := <f> node
+    ; prettyprinted := <f ; pp-mucalculus-string> node
   
   remove_unused_vars_from_varsdecl(|used_vars): VarsDecl(vars, type) -> result
   where
