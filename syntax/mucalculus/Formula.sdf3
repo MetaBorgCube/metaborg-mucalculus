@@ -79,16 +79,35 @@ template options
   
 context-free priorities
 
+     // 26
      {ActionFormula.ActNegation}
-   > {left: ActionFormula.ActAnd ActionFormula.ActOr}
+     // 24
+   > {ActionFormula.ActAnd}
+     // 23
+   > {ActionFormula.ActOr}
+     // 22
    > {ActionFormula.ActImplies}
+     // 21
    > {ActionFormula.ActForall ActionFormula.ActExists},
 
+     // 33
      {RegularFormula.TRClosure RegularFormula.TClosure}
+     // 32
    > {RegularFormula.Seq}
+     // 31
    > {RegularFormula.Alt},
 
-     {StateFormula.Negation StateFormula.Diamond StateFormula.Box}
-   > {left: StateFormula.And StateFormula.Or}
+     // 47
+     {StateFormula.Negation}
+     // 46
+   > {StateFormula.Diamond StateFormula.Box}
+     // 45
+   > {StateFormula.And}
+     // 44
+   > {StateFormula.Or}
+     // 43
    > {StateFormula.Implies}
-   > {StateFormula.Forall StateFormula.Exists StateFormula.Mu StateFormula.Nu}
+     // 42
+   > {StateFormula.Forall StateFormula.Exists}
+     // 41
+   > {StateFormula.Mu StateFormula.Nu}
