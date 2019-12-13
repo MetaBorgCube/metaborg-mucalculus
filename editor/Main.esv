@@ -14,7 +14,7 @@ language
   provider : target/metaborg/stratego.ctree
 
   table         : target/metaborg/sdf.tbl
-  start symbols : Start
+  start symbols : StateFormula
 
   line comment  : "//"
   block comment : "/*" * "*/"
