@@ -8,6 +8,7 @@ imports
   mcrl2/Common
   mcrl2/Data
   mcrl2/Sort
+  mcrl2/Proc
 
 lexical syntax
 
@@ -28,7 +29,7 @@ context-free syntax
   ActionFormula.ActFalse = [false]
   ActionFormula = DataValExpression
   
-  ActionFormula.Action = Action
+  ActionFormula = MCRL2-Action
   
   ActionFormula.ActForall = [forall [{MCRL2-VarsDecl ", "}+].[ActionFormula]]
   ActionFormula.ActExists = [exists [{MCRL2-VarsDecl ", "}+].[ActionFormula]]
