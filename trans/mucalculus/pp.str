@@ -42,6 +42,7 @@ rules
   prettyprint-mucalculus-MCRL2-SortExpr = prettyprint-mcrl2-MCRL2-SortExpr
   prettyprint-mucalculus-MCRL2-DataExpr = prettyprint-mcrl2-MCRL2-DataExpr
   prettyprint-mucalculus-MCRL2-VarsDecl = prettyprint-mcrl2-MCRL2-VarsDecl
+  prettyprint-mucalculus-MCRL2-Action   = prettyprint-mcrl2-MCRL2-Action
 
 rules
   
