@@ -1,0 +1,20 @@
+module pp
+
+imports
+
+  libstratego-gpp
+  libspoofax/editor/refactoring/-
+  mucalculus/pp
+
+rules
+
+  editor-format:
+    (node, _, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path
+    ; filename := <guarantee-extension(|$[pp.[ext]])> path
+    ; result   := <pp-mucalculus-string> node
+
+rules
+  
+  construct-textual-change = construct-textual-change(pp-partial-mucalculus-string, parenthesize, override-reconstruction, resugar)

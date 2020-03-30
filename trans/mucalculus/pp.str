@@ -4,19 +4,8 @@ imports
 
   libstratego-gpp
   libspoofax/sdf/pp
-  libspoofax/editor/refactoring/-
+  pp/mucalculus/-
   pp/mucalculus-parenthesize
-  pp/mucalculus-pp
-  mcrl2/syntax/-
-
-rules
-
-  editor-format:
-    (node, _, ast, path, project-path) -> (filename, result)
-    with
-      ext      := <get-extension> path
-    ; filename := <guarantee-extension(|$[pp.[ext]])> path
-    ; result   := <pp-mucalculus-string> node
 
 rules
   
@@ -43,7 +32,3 @@ rules
   prettyprint-mucalculus-MCRL2-DataExpr = prettyprint-mcrl2-MCRL2-DataExpr
   prettyprint-mucalculus-MCRL2-VarsDecl = prettyprint-mcrl2-MCRL2-VarsDecl
   prettyprint-mucalculus-MCRL2-Action   = prettyprint-mcrl2-MCRL2-Action
-
-rules
-  
-  construct-textual-change = construct-textual-change(pp-partial-mucalculus-string, parenthesize, override-reconstruction, resugar)
