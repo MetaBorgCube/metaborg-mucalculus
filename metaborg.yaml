@@ -32,6 +32,8 @@ exports:
   directory: src-gen
   includes:
   - "completion/colorer/mucalculus/**/*.esv"
+debug:
+  typesmart: false
 language:
   sdf:
     pretty-print: mucalculus
